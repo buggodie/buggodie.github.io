@@ -16,7 +16,7 @@
 <meta property="og:image" content="http://yoursite.com/images/tomcat_debug/tomcat_config.png">
 <meta property="og:image" content="http://yoursite.com/images/tomcat_debug/tomcat_config_agentlib.png">
 <meta property="og:image" content="http://yoursite.com/images/tomcat_debug/tomcat_regedit.png">
-<meta property="og:updated_time" content="2015-11-23T13:04:56.626Z">
+<meta property="og:updated_time" content="2015-11-23T13:54:31.834Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于tomcat远程调试的方法（适合windows下以解压后脚本启动和以服务启动的tomcat）">
 <meta name="twitter:description" content="一般情况下在开发的时候tomcat运行在本地可以使用eclipse直接调试，但当在联调或测试环境中，没办法直接把eclipse部署在远程服务器上去跟踪问题，只能根据代码中日志记录一步步的去看问题。但这种方式太累，只能根据日志和代码去猜问题原因，于是就想找去一种能本地远程调试的方法。关于tomcat远程调试的方法，网上很多但只提到了tomcat解压以脚本启动tomcat的时候怎么去配置远程调试，没有">
@@ -257,7 +257,9 @@
 <p>如果端口号被占用可以修改端口后或者新建bat文件 set address 然后start</p>
 </blockquote>
 <h3 id="以服务方式启动的tomcat怎么调试">以服务方式启动的tomcat怎么调试</h3><blockquote>
-<p><strong>上面说过：JPDA是java提供的，JPDA相关调试参数也是设置在Java的参数里的</strong><br>当tomcat以服务器方式安装后，桌面右下角会有如下的tomcat配置工具。<br><img src="/images/tomcat_debug/tomcat_config.png" alt="tomcat配置工具">，<br>这里的Java Options即上面Catalina.bat关键代码的截图里的部分参数，同理，我们把上面JPDA_OPTS的相关参数设置到Java Options里<br><img src="/images/tomcat_debug/tomcat_config_agentlib.png" alt="tomcat配置工具开启JPDA"><br>启动之后就可以调试了。</p>
+<p><strong>上面说过：JPDA是java提供的，JPDA相关调试参数也是设置在Java的参数里的</strong><br>当tomcat以服务器方式安装后，桌面右下角会有如下的tomcat配置工具。<br><img src="/images/tomcat_debug/tomcat_config.png" alt="tomcat配置工具">，<br>这里的Java Options即上面Catalina.bat关键代码的截图里的部分参数，同理，我们把上面JPDA_OPTS的相关参数设置到Java Options里<br><img src="/images/tomcat_debug/tomcat_config_agentlib.png" alt="tomcat配置工具开启JPDA"></p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-agentli<span class="variable">b:jdwp</span>=transport=dt_socket,address=<span class="number">9999</span>,server=<span class="keyword">y</span>,<span class="keyword">suspend</span>=<span class="keyword">n</span></span><br></pre></td></tr></table></figure>
+<p>启动之后就可以调试了。</p>
 </blockquote>
 <h3 id="以服务方式启动的tomcat（没有tomcat配置工具）">以服务方式启动的tomcat（没有tomcat配置工具）</h3><blockquote>
 <p>当以服务方式启动tomcat但没有tomcat配置工具的环境中要开启调试的话就要去设置注册表里的参数，因为这个时候tomcat配置工具里的相关参数都在注册表里。<br>tomcat6在Windows下的注册表目录是<code>HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Apache Software Foundation\Procrun 2.0\tomcat6\Parameters\Java</code><br><img src="/images/tomcat_debug/tomcat_regedit.png" alt="tomcatregedit"><br>如图所示，添加相关JPDA参数后启动服务就可以远程调试了</p>
